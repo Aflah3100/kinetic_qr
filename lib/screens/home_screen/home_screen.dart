@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:kinetic_qr/providers/screens_provider.dart';
+import 'package:kinetic_qr/providers/home_screen_provider.dart';
 import 'package:kinetic_qr/router/route_constants.dart';
 import 'package:kinetic_qr/screens/create_qr_code_screen/create_qr_code_screen.dart';
 import 'package:kinetic_qr/screens/home_screen/widgets/bottom_nav_bar.dart';
@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   final screens = [
-    const CreateQrCodeScreen(),
+    CreateQrCodeScreen(),
     const ScanQrCodeScreen(),
     const SettingsScreen()
   ];
@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
     final height = MediaQuery.sizeOf(context).height;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Consumer<ScreensProvider>(
+      body: Consumer<HomeScreenProvider>(
         builder: (context, provider, child) {
           return screens[provider.getCurrentScreenIndex()];
         },

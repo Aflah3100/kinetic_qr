@@ -1,5 +1,7 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:kinetic_qr/providers/screens_provider.dart';
+import 'package:kinetic_qr/providers/create_qr_code_screen_provider.dart';
+import 'package:kinetic_qr/providers/home_screen_provider.dart';
 import 'package:kinetic_qr/router/generate_route.dart';
 import 'package:kinetic_qr/screens/home_screen/home_screen.dart';
 import 'package:kinetic_qr/screens/loading_screen/loading_screen.dart';
@@ -7,7 +9,11 @@ import 'package:kinetic_qr/utils/assets.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(DevicePreview(
+      enabled: true,
+      builder: (context) {
+        return const MyApp();
+      }));
 }
 
 class MyApp extends StatelessWidget {
@@ -19,10 +25,14 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => ScreensProvider(),
-        )
+          create: (context) => HomeScreenProvider(),
+        ),
+        ChangeNotifierProvider(
+            create: (context) => CreateQrCodeScreenProvider())
       ],
       child: MaterialApp(
+        builder: DevicePreview.appBuilder,
+        locale: DevicePreview.locale(context),
         title: 'Kinetic QR',
         theme: ThemeData(
             colorScheme:

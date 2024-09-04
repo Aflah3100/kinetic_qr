@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ScreensProvider with ChangeNotifier {
+class HomeScreenProvider with ChangeNotifier {
   int _currentScreenIndex = 0;
 
   int getCurrentScreenIndex() => _currentScreenIndex;

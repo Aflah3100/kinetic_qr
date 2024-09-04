@@ -1,6 +1,5 @@
-
 import 'package:flutter/material.dart';
-import 'package:kinetic_qr/providers/screens_provider.dart';
+import 'package:kinetic_qr/providers/home_screen_provider.dart';
 import 'package:kinetic_qr/utils/assets.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +10,7 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screensProvider = Provider.of<ScreensProvider>(context, listen: true);
+    final screensProvider = Provider.of<HomeScreenProvider>(context, listen: true);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       height: 70,
@@ -66,7 +65,6 @@ class BottomNavBar extends StatelessWidget {
                 ? Assets.loadingScreenBlueColor
                 : Colors.black38,
             isBold: (screensProvider.getCurrentScreenIndex() == 2),
-            
             onTap: () {
               screensProvider.setCurrentScreenIndex(2);
             },
@@ -78,20 +76,19 @@ class BottomNavBar extends StatelessWidget {
 }
 
 class BottomNavigationButton extends StatelessWidget {
-   BottomNavigationButton({
-    super.key,
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    required this.labelColor,
-    required this.isBold
-  });
+  const BottomNavigationButton(
+      {super.key,
+      required this.icon,
+      required this.label,
+      required this.onTap,
+      required this.labelColor,
+      required this.isBold});
 
   final Icon icon;
   final String label;
   final Color labelColor;
   final void Function() onTap;
-  bool isBold;
+  final bool isBold;
 
   @override
   Widget build(BuildContext context) {
