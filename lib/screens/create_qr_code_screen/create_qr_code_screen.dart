@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kinetic_qr/models/contact_info_model.dart';
 import 'package:kinetic_qr/providers/create_qr_code_screen_provider.dart';
 import 'package:kinetic_qr/screens/create_qr_code_screen/widgets/contacts_qr_code_container.dart';
 import 'package:kinetic_qr/screens/create_qr_code_screen/widgets/qr_code_options_button.dart';
 import 'package:kinetic_qr/screens/create_qr_code_screen/widgets/text_qr_code_container.dart';
 import 'package:kinetic_qr/screens/create_qr_code_screen/widgets/website_qr_code_container.dart';
 import 'package:kinetic_qr/screens/create_qr_code_screen/widgets/wifi_qr_code_container.dart';
+import 'package:kinetic_qr/screens/qr_code_display_screen/qr_code_display_screen.dart';
 import 'package:provider/provider.dart';
 
 class CreateQrCodeScreen extends StatelessWidget {
@@ -36,16 +38,68 @@ class CreateQrCodeScreen extends StatelessWidget {
         Provider.of<CreateQrCodeScreenProvider>(context, listen: true);
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 231, 229, 229),
+      backgroundColor:  Colors.grey[100],
       appBar: AppBar(
         title: const Text(
           'Create QR Code',
-          style: TextStyle(fontSize: 22),
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
         ),
         actions: [
           // Create-button
           InkWell(
-            onTap: () {},
+            onTap: () {
+              int index = screenProvider.getScreenIndex();
+
+              //Text-Qr-Code-Generation
+              if (index == 0) {
+                if (textQrCodeController.text.isNotEmpty) {
+                  Navigator.pushNamed(context, QrCodeDisplayScreen.routeName,
+                      arguments: textQrCodeController.text);
+                }
+              }
+              //Website-Qr-code-Generation
+              else if (index == 1) {
+                if (webisteQrCodeController.text.isNotEmpty) {
+                  Navigator.pushNamed(context, QrCodeDisplayScreen.routeName,
+                      arguments: webisteQrCodeController.text.trim());
+                }
+              }
+              //Contacts-Qr-code-Generation
+              else if (index == 2) {
+                if (nameController.text.isNotEmpty &&
+                    phoneNumbercontroller.text.isNotEmpty) {
+                  final contactInfoModel = ContactInfoModel(
+                      name: nameController.text,
+                      phoneNumber: phoneNumbercontroller.text,
+                      email: emailController.text,
+                      companyName: companyNamecontroller.text,
+                      jobTitle: jobTitleController.text,
+                      address: addresController.text);
+                  Navigator.pushNamed(context, QrCodeDisplayScreen.routeName,
+                      arguments: contactInfoModel.generateQrData());
+                }
+              }
+              //Contacts-Qr-code-Generation
+              else if (index == 3) {
+                if (wifiNetworkNameController.text.isNotEmpty &&
+                    wifiNetworkPasswordController.text.isNotEmpty) {
+                  String encyptionType = '';
+                  final wifiSecurityTypeIndex = context
+                      .read<CreateQrCodeScreenProvider>()
+                      .getWifiSecurityType();
+                  if (wifiSecurityTypeIndex == 0) {
+                    encyptionType = "WPA";
+                  } else if (wifiSecurityTypeIndex == 1) {
+                    encyptionType = 'WEP';
+                  }
+                  final wifiQrData = 'WIFI:S:${wifiNetworkNameController.text};'
+                      'T:$encyptionType;'
+                      'P:${wifiNetworkPasswordController.text};;';
+                  Navigator.pushNamed(context, QrCodeDisplayScreen.routeName,
+                      arguments: wifiQrData);
+                }
+              }
+            },
             child: Container(
               width: 90,
               height: 100,
