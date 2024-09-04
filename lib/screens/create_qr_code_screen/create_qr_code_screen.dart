@@ -8,6 +8,7 @@ import 'package:kinetic_qr/screens/create_qr_code_screen/widgets/text_qr_code_co
 import 'package:kinetic_qr/screens/create_qr_code_screen/widgets/website_qr_code_container.dart';
 import 'package:kinetic_qr/screens/create_qr_code_screen/widgets/wifi_qr_code_container.dart';
 import 'package:kinetic_qr/screens/qr_code_display_screen/qr_code_display_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class CreateQrCodeScreen extends StatelessWidget {
@@ -38,7 +39,7 @@ class CreateQrCodeScreen extends StatelessWidget {
         Provider.of<CreateQrCodeScreenProvider>(context, listen: true);
 
     return Scaffold(
-      backgroundColor:  Colors.grey[100],
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: const Text(
           'Create QR Code',
@@ -55,6 +56,7 @@ class CreateQrCodeScreen extends StatelessWidget {
                 if (textQrCodeController.text.isNotEmpty) {
                   Navigator.pushNamed(context, QrCodeDisplayScreen.routeName,
                       arguments: textQrCodeController.text);
+                  textQrCodeController.clear();
                 }
               }
               //Website-Qr-code-Generation
@@ -62,6 +64,7 @@ class CreateQrCodeScreen extends StatelessWidget {
                 if (webisteQrCodeController.text.isNotEmpty) {
                   Navigator.pushNamed(context, QrCodeDisplayScreen.routeName,
                       arguments: webisteQrCodeController.text.trim());
+                  webisteQrCodeController.clear();
                 }
               }
               //Contacts-Qr-code-Generation
@@ -77,6 +80,12 @@ class CreateQrCodeScreen extends StatelessWidget {
                       address: addresController.text);
                   Navigator.pushNamed(context, QrCodeDisplayScreen.routeName,
                       arguments: contactInfoModel.generateQrData());
+                  nameController.clear();
+                  phoneNumbercontroller.clear();
+                  emailController.clear();
+                  companyNamecontroller.clear();
+                  jobTitleController.clear();
+                  addresController.clear();
                 }
               }
               //Contacts-Qr-code-Generation
@@ -97,6 +106,12 @@ class CreateQrCodeScreen extends StatelessWidget {
                       'P:${wifiNetworkPasswordController.text};;';
                   Navigator.pushNamed(context, QrCodeDisplayScreen.routeName,
                       arguments: wifiQrData);
+
+                  wifiNetworkNameController.clear();
+                  wifiNetworkPasswordController.clear();
+                  context
+                      .read<CreateQrCodeScreenProvider>()
+                      .setWifiSecurityType(0);
                 }
               }
             },

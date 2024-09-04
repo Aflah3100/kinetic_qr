@@ -1,12 +1,40 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:kinetic_qr/router/route_constants.dart';
 import 'package:kinetic_qr/utils/assets.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:screenshot/screenshot.dart';
 
 class QrCodeDisplayScreen extends StatelessWidget {
   static const routeName = RouteConstants.qrCodeDisplayScreen;
-  const QrCodeDisplayScreen({super.key, required this.qrCodeData});
+  QrCodeDisplayScreen({super.key, required this.qrCodeData});
   final String qrCodeData;
+  final screenShotController = ScreenshotController();
+
+  Future<void> requestStoragePermission() async {
+    await Permission.storage.request();
+  }
+
+  Future<bool> saveQrCode() async {
+    try {
+      final Uint8List? image = await screenShotController.capture();
+      if (image != null) {
+        final result = await ImageGallerySaver.saveImage(image);
+        if (result['isSuccess']) {
+          //saving-success
+          return true;
+        } else {
+          return false;
+        }
+      }
+    } catch (e) {
+      debugPrint("Error saving QR code: $e");
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +53,18 @@ class QrCodeDisplayScreen extends StatelessWidget {
         child: Column(
           children: [
             //Qr-code-display-container
-            Container(
-              width: width,
-              height: height * 0.45,
-              child: Center(
-                child: Container(
-                  width: width * 0.7,
-                  color: Colors.white,
-                  child: QrImageView(
-                    data: qrCodeData,
+            Screenshot(
+              controller: screenShotController,
+              child: SizedBox(
+                width: width,
+                height: height * 0.45,
+                child: Center(
+                  child: Container(
+                    width: width * 0.7,
+                    color: Colors.white,
+                    child: QrImageView(
+                      data: qrCodeData,
+                    ),
                   ),
                 ),
               ),
@@ -52,7 +83,24 @@ class QrCodeDisplayScreen extends StatelessWidget {
                     OptionsButton(
                         width: width,
                         label: 'Save ',
-                        onTap: () {},
+                        onTap: () async {
+                          await requestStoragePermission();
+                          final result = await saveQrCode();
+                          if (result) {
+                            Fluttertoast.showToast(
+                                msg: 'QR Code Saved to Gallery',
+                                backgroundColor: Colors.green,
+                                textColor: Colors.white,
+                                gravity: ToastGravity.CENTER);
+                            Navigator.pop(context);
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: 'Error Saving QR Code to Gallery',
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                gravity: ToastGravity.CENTER);
+                          }
+                        },
                         buttonColor: Assets.loadingScreenBlueColor,
                         icon: const Icon(
                           Icons.save_outlined,
