@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kinetic_qr/providers/create_qr_code_screen_provider.dart';
+import 'package:provider/provider.dart';
 
-class ContacrsQrCodeContainer extends StatelessWidget {
-  const ContacrsQrCodeContainer({
+class ContactsQrCodeContainer extends StatelessWidget {
+  const ContactsQrCodeContainer({
     super.key,
     required this.nameController,
     required this.phoneNumbercontroller,
@@ -18,8 +20,21 @@ class ContacrsQrCodeContainer extends StatelessWidget {
   final TextEditingController jobTitleController;
   final TextEditingController addressController;
 
+  bool validateContactTextField() {
+    return nameController.text.isEmpty || phoneNumbercontroller.text.isEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      (nameController.text.isNotEmpty && phoneNumbercontroller.text.isNotEmpty)
+          ? context
+              .read<CreateQrCodeScreenProvider>()
+              .setCreateButtonStatus(true)
+          : context
+              .read<CreateQrCodeScreenProvider>()
+              .setCreateButtonStatus(false);
+    });
     return Container(
         width: double.maxFinite,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -38,6 +53,15 @@ class ContacrsQrCodeContainer extends StatelessWidget {
             ),
             SizedBox(
               child: TextFormField(
+                onChanged: (_) {
+                  validateContactTextField()
+                      ? context
+                          .read<CreateQrCodeScreenProvider>()
+                          .setCreateButtonStatus(false)
+                      : context
+                          .read<CreateQrCodeScreenProvider>()
+                          .setCreateButtonStatus(true);
+                },
                 controller: nameController,
                 keyboardType: TextInputType.name,
                 minLines: 1,
@@ -55,6 +79,15 @@ class ContacrsQrCodeContainer extends StatelessWidget {
               ),
             ),
             TextFormField(
+              onChanged: (_) {
+                validateContactTextField()
+                    ? context
+                        .read<CreateQrCodeScreenProvider>()
+                        .setCreateButtonStatus(false)
+                    : context
+                        .read<CreateQrCodeScreenProvider>()
+                        .setCreateButtonStatus(true);
+              },
               controller: phoneNumbercontroller,
               keyboardType: TextInputType.number,
             ),

@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:kinetic_qr/providers/create_qr_code_screen_provider.dart';
-import 'package:kinetic_qr/screens/create_qr_code_screen/create_qr_code_screen.dart';
 import 'package:kinetic_qr/utils/assets.dart';
 import 'package:provider/provider.dart';
 
@@ -16,8 +15,24 @@ class WifiQrCodeContainer extends StatelessWidget {
   final TextEditingController networkNameController;
   final TextEditingController networkPasswordController;
 
+  bool validateWifiTextField() {
+    return networkNameController.text.isEmpty ||
+        networkPasswordController.text.isEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      (networkNameController.text.isNotEmpty &&
+              networkPasswordController.text.isNotEmpty)
+          ? context
+              .read<CreateQrCodeScreenProvider>()
+              .setCreateButtonStatus(true)
+          : context
+              .read<CreateQrCodeScreenProvider>()
+              .setCreateButtonStatus(false);
+    });
+
     return Container(
         width: double.maxFinite,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -36,6 +51,15 @@ class WifiQrCodeContainer extends StatelessWidget {
             ),
             SizedBox(
               child: TextFormField(
+                onChanged: (_) {
+                  validateWifiTextField()
+                      ? context
+                          .read<CreateQrCodeScreenProvider>()
+                          .setCreateButtonStatus(false)
+                      : context
+                          .read<CreateQrCodeScreenProvider>()
+                          .setCreateButtonStatus(true);
+                },
                 controller: networkNameController,
                 keyboardType: TextInputType.name,
               ),
@@ -51,6 +75,15 @@ class WifiQrCodeContainer extends StatelessWidget {
               ),
             ),
             TextFormField(
+              onChanged: (_) {
+                validateWifiTextField()
+                    ? context
+                        .read<CreateQrCodeScreenProvider>()
+                        .setCreateButtonStatus(false)
+                    : context
+                        .read<CreateQrCodeScreenProvider>()
+                        .setCreateButtonStatus(true);
+              },
               controller: networkPasswordController,
               keyboardType: TextInputType.visiblePassword,
               obscureText: true,
