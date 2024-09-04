@@ -14,92 +14,100 @@ class LoadingScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 15),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Center(
-                  child: Text(
-                'Welcome To',
-                style: GoogleFonts.dancingScript(
-                    fontSize: 47.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    letterSpacing: 2),
-              )),
-
-              const Text(
-                'Kinetic QR',
-                style: TextStyle(
-                    fontFamily: 'Kanit',
-                    fontSize: 35.0,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xffEC4533),
-                    letterSpacing: 2),
-              ),
-              const SizedBox(
-                height: 70.0,
-              ),
-              const Text(
-                'Empowering Your Journey ',
-                style: TextStyle(
-                    fontSize: 35.0,
-                    fontFamily: 'Protest Guerilla',
-                    fontWeight: FontWeight.w100,
-                    letterSpacing: 1,
-                    color: Color(0xff13B9DB)),
-              ),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'With ',
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontFamily: 'Protest Guerilla',
-                        letterSpacing: 2.5,
-                        color: Color(0xff14C5D9)),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 50, horizontal: 15),
+                  child: Column(
+                    children: [
+                      Center(
+                          child: Text(
+                        'Welcome To',
+                        style: GoogleFonts.dancingScript(
+                            fontSize: 47.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            letterSpacing: 2),
+                      )),
+                      const Text(
+                        'Kinetic QR',
+                        style: TextStyle(
+                            fontFamily: 'Kanit',
+                            fontSize: 35.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xffEC4533),
+                            letterSpacing: 2),
+                      ),
+                      const SizedBox(
+                        height: 70.0,
+                      ),
+                      const Text(
+                        'Empowering Your Journey ',
+                        style: TextStyle(
+                            fontSize: 35.0,
+                            fontFamily: 'Protest Guerilla',
+                            fontWeight: FontWeight.w100,
+                            letterSpacing: 1,
+                            color: Color(0xff13B9DB)),
+                      ),
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'With ',
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontFamily: 'Protest Guerilla',
+                                letterSpacing: 2.5,
+                                color: Color(0xff14C5D9)),
+                          ),
+                          Text(
+                            'Every ',
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontFamily: 'Protest Guerilla',
+                                letterSpacing: 2.5,
+                                color: Color(0xffEC4533)),
+                          ),
+                          Text(
+                            'Scan ',
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontFamily: 'Protest Guerilla',
+                                letterSpacing: 2.5,
+                                color: Color(0xffF2BF27)),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      //Scan-logo-animation
+                      Container(
+                        padding: const EdgeInsets.only(left: 45),
+                        child: Center(
+                            child: Lottie.asset(
+                          Assets.qrCodeAnimation,
+                          fit: BoxFit.fill,
+                        )),
+                      ),
+                      const SizedBox(
+                        height: 60,
+                      ),
+                    ],
                   ),
-                  Text(
-                    'Every ',
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontFamily: 'Protest Guerilla',
-                        letterSpacing: 2.5,
-                        color: Color(0xffEC4533)),
-                  ),
-                  Text(
-                    'Scan ',
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontFamily: 'Protest Guerilla',
-                        letterSpacing: 2.5,
-                        color: Color(0xffF2BF27)),
-                  ),
-                ],
+                ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              //Scan-logo-animation
-              Container(
-                height: 300,
-                padding: const EdgeInsets.only(left: 45),
-                child: Center(
-                    child: Lottie.asset(
-                  Assets.qrCodeAnimation,
-                  fit: BoxFit.fill,
-                )),
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              //Start-Button
-              const StartButton()
-            ],
-          ),
+            ),
+            // Start Button aligned at the bottom center
+            const Padding(
+              padding: EdgeInsets.only(bottom: 30, left: 15, right: 15),
+              child: StartButton(),
+            ),
+          ],
         ),
       ),
     );

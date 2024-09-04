@@ -5,6 +5,7 @@ import 'package:kinetic_qr/providers/home_screen_provider.dart';
 import 'package:kinetic_qr/router/generate_route.dart';
 import 'package:kinetic_qr/screens/home_screen/home_screen.dart';
 import 'package:kinetic_qr/screens/loading_screen/loading_screen.dart';
+import 'package:kinetic_qr/services/shared_prefs.dart';
 import 'package:kinetic_qr/utils/assets.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +41,18 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
             fontFamily: 'Roboto'),
         onGenerateRoute: generateRoute,
-        home: HomeScreen(),
+        home: FutureBuilder(
+          future: SharedPrefs.instance.getLoginFlag(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasData && snapshot.data != null) {
+              return HomeScreen();
+            } else {
+              return const LoadingScreen();
+            }
+          },
+        ),
       ),
     );
   }

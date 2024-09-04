@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kinetic_qr/screens/home_screen/home_screen.dart';
+import 'package:kinetic_qr/services/shared_prefs.dart';
 import 'package:kinetic_qr/utils/assets.dart';
 import 'package:lottie/lottie.dart';
 
@@ -10,7 +12,11 @@ class StartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () async {
+        await SharedPrefs.instance.setLoginFlag();
+
+        Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+      },
       child: Container(
           height: 60,
           margin: const EdgeInsets.symmetric(horizontal: 10),
