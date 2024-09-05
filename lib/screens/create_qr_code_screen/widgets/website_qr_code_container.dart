@@ -95,7 +95,8 @@ class _WebisteQrCodeContainerState extends State<WebisteQrCodeContainer> {
                         label: 'www.',
                         onTap: () {
                           setState(() {
-                            widget.websiteTextController.text = 'www.';
+                            final text=widget.websiteTextController.text;
+                            widget.websiteTextController.text = '${text}www.';
                           });
                         }),
                     const SizedBox(
@@ -105,7 +106,8 @@ class _WebisteQrCodeContainerState extends State<WebisteQrCodeContainer> {
                         label: '.com',
                         onTap: () {
                           setState(() {
-                            widget.websiteTextController.text = '.com';
+                            final text=widget.websiteTextController.text;
+                            widget.websiteTextController.text = '$text.com';
                           });
                         })
                   ],

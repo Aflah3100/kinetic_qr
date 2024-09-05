@@ -9,7 +9,6 @@ import 'package:kinetic_qr/screens/create_qr_code_screen/widgets/website_qr_code
 import 'package:kinetic_qr/screens/create_qr_code_screen/widgets/wifi_qr_code_container.dart';
 import 'package:kinetic_qr/screens/qr_code_display_screen/qr_code_display_screen.dart';
 import 'package:kinetic_qr/utils/assets.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class CreateQrCodeScreen extends StatelessWidget {

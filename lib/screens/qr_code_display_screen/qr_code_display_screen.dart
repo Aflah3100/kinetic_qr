@@ -1,17 +1,30 @@
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
+
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:kinetic_qr/router/route_constants.dart';
+import 'package:kinetic_qr/screens/qr_code_result_screen/widgets/result_options_button.dart';
 import 'package:kinetic_qr/utils/assets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
-class QrCodeDisplayScreen extends StatelessWidget {
+class QrCodeDisplayScreen extends StatefulWidget {
   static const routeName = RouteConstants.qrCodeDisplayScreen;
-  QrCodeDisplayScreen({super.key, required this.qrCodeData});
+  const QrCodeDisplayScreen({super.key, required this.qrCodeData});
   final String qrCodeData;
+
+  @override
+  State<QrCodeDisplayScreen> createState() => _QrCodeDisplayScreenState();
+}
+
+class _QrCodeDisplayScreenState extends State<QrCodeDisplayScreen> {
+  bool isSharing = false;
+  bool isSaving = false;
   final screenShotController = ScreenshotController();
 
   Future<void> requestStoragePermission() async {
@@ -44,12 +57,14 @@ class QrCodeDisplayScreen extends StatelessWidget {
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
         title: const Text(
           ' QR Code',
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
       ),
-      body: Container(
+      body: SizedBox(
         child: Column(
           children: [
             //Qr-code-display-container
@@ -63,7 +78,7 @@ class QrCodeDisplayScreen extends StatelessWidget {
                     width: width * 0.7,
                     color: Colors.white,
                     child: QrImageView(
-                      data: qrCodeData,
+                      data: widget.qrCodeData,
                     ),
                   ),
                 ),
@@ -84,35 +99,95 @@ class QrCodeDisplayScreen extends StatelessWidget {
                         width: width,
                         label: 'Save ',
                         onTap: () async {
-                          await requestStoragePermission();
-                          final result = await saveQrCode();
-                          if (result) {
-                            Fluttertoast.showToast(
-                                msg: 'QR Code Saved to Gallery',
-                                backgroundColor: Colors.green,
-                                textColor: Colors.white,
-                                gravity: ToastGravity.CENTER);
-                            Navigator.pop(context);
-                          } else {
-                            Fluttertoast.showToast(
-                                msg: 'Error Saving QR Code to Gallery',
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                gravity: ToastGravity.CENTER);
+                          if (!isSaving) {
+                            setState(() {
+                              isSaving = true;
+                            });
+                            await requestStoragePermission();
+                            final result = await saveQrCode();
+                            if (result) {
+                              Fluttertoast.showToast(
+                                  msg: 'QR Code Saved to Gallery',
+                                  backgroundColor: Colors.green,
+                                  textColor: Colors.white,
+                                  gravity: ToastGravity.CENTER);
+                              Navigator.pop(context);
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: 'Error Saving QR Code to Gallery',
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  gravity: ToastGravity.CENTER);
+                            }
+                            setState(() {
+                              isSaving = false;
+                            });
                           }
                         },
                         buttonColor: Assets.loadingScreenBlueColor,
-                        icon: const Icon(
-                          Icons.save_outlined,
-                          color: Colors.white,
-                        )),
+                        icon: isSaving
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.save_outlined,
+                                color: Colors.white,
+                              )),
+                    OptionsButton(
+                      width: width,
+                      label: 'Share',
+                      onTap: () async {
+                        if (!isSharing) {
+                          setState(() {
+                            isSharing = true;
+                          });
+
+                          Uint8List? imageFile;
+                          await screenShotController.capture().then((image) {
+                            imageFile = image;
+                          });
+
+                          if (imageFile != null) {
+                            await Share.shareXFiles([
+                              XFile.fromData(imageFile!, mimeType: 'image/png')
+                            ], subject: 'Sharing QR Code');
+
+                            setState(() {
+                              isSharing = false;
+                            });
+                          } else {
+                            setState(() {
+                              isSharing = false;
+                            });
+                          }
+                        }
+                      },
+                      icon: isSharing
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Icon(
+                              Icons.share,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                      buttonColor: Assets.loadingScreenBlueColor,
+                    ),
                     OptionsButton(
                         width: width,
                         label: 'Cancel',
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        buttonColor: const Color(0xffEC4533))
+                        buttonColor: const Color(0xffEC4533)),
                   ],
                 ),
               ),
@@ -128,7 +203,7 @@ class QrCodeDisplayScreen extends StatelessWidget {
       required String label,
       required void Function() onTap,
       required Color buttonColor,
-      Icon? icon}) {
+      Widget? icon}) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -137,15 +212,18 @@ class QrCodeDisplayScreen extends StatelessWidget {
         decoration: BoxDecoration(
             color: buttonColor, borderRadius: BorderRadius.circular(7)),
         child: Center(
-            child: Row(
+            child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            icon ?? const SizedBox(),
             Text(
               label,
               style: const TextStyle(
                   color: Colors.white, fontWeight: FontWeight.w500),
             ),
-            icon ?? const SizedBox(),
+            const SizedBox(
+              width: 2,
+            ),
           ],
         )),
       ),
