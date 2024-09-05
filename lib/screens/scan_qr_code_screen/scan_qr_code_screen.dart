@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:kinetic_qr/screens/qr_code_result_screen/qr_code_result_display_screen.dart';
 import 'package:kinetic_qr/utils/assets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:torch_light/torch_light.dart';
 
 class ScanQrCodeScreen extends StatefulWidget {
-  ScanQrCodeScreen({super.key});
+  const ScanQrCodeScreen({super.key});
 
   @override
   _ScanQrCodeScreenState createState() => _ScanQrCodeScreenState();
@@ -15,6 +17,26 @@ class ScanQrCodeScreen extends StatefulWidget {
 class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
   final MobileScannerController scannerController = MobileScannerController();
   bool isProcessing = false;
+  bool isTorchOn = false;
+
+  void _toggleTorch() async {
+    try {
+      if (isTorchOn) {
+        scannerController.toggleTorch();
+      } else {
+        scannerController.toggleTorch();
+      }
+
+      setState(() {
+        isTorchOn = !isTorchOn;
+      });
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: 'Could not toggle torch: $e',
+          backgroundColor: Colors.red,
+          textColor: Colors.white);
+    }
+  }
 
   String captureTime() {
     DateTime now = DateTime.now();
@@ -45,16 +67,60 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
       controller: scannerController,
       overlayBuilder: (context, constraints) {
         return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Stack(
             children: [
-              const Text(
-                'Scan QR code/Barcode',
-                style: TextStyle(fontSize: 15.0, color: Colors.white),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Scan QR code/Barcode',
+                    style: TextStyle(fontSize: 15.0, color: Colors.white),
+                  ),
+                  Lottie.asset(
+                    Assets.qrCodeScanningAnimation,
+                    width: 300,
+                  ),
+                ],
               ),
-              Lottie.asset(
-                Assets.qrCodeScanningAnimation,
-                width: 300,
+              Positioned(
+                bottom: 30,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Container(
+                    width: 100,
+                    height: 45,
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(3),
+                      color: const Color.fromARGB(128, 57, 56, 56),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            _toggleTorch();
+                          },
+                          child: Icon(
+                            isTorchOn ? Icons.flash_off : Icons.flash_on,
+                            size: 23,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.0),
+                          child: VerticalDivider(),
+                        ),
+                        const Icon(
+                          size: 23,
+                          Icons.photo,
+                          color: Colors.white,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

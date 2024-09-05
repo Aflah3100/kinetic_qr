@@ -3,10 +3,8 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:kinetic_qr/router/route_constants.dart';
-import 'package:kinetic_qr/screens/qr_code_result_screen/widgets/result_options_button.dart';
 import 'package:kinetic_qr/utils/assets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
