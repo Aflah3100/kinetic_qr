@@ -9,3 +9,5 @@ class Assets {
       'assets/animations/qr_code_scanning_animation.json';
   static const loadingScreenBlueColor = Color.fromARGB(255, 10, 156, 185);
 }
+
+enum BarCodeType { text, website, contact, wifi,unknown }

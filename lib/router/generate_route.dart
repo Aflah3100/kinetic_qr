@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kinetic_qr/screens/home_screen/home_screen.dart';
 import 'package:kinetic_qr/screens/qr_code_display_screen/qr_code_display_screen.dart';
 import 'package:kinetic_qr/screens/qr_code_result_screen/qr_code_result_display_screen.dart';
+import 'package:kinetic_qr/utils/assets.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -15,8 +16,8 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case QrCodeResultDisplayScreen.routeName:
       final args = routeSettings.arguments as List;
       final barcodeList = args[0] as List<Barcode>;
-      final barCodeType = args[1] as String;
-      final capturedTime=args[2] as String;
+      final barCodeType = args[1] as BarCodeType;
+      final capturedTime = args[2] as String;
       return MaterialPageRoute(
           builder: (_) => QrCodeResultDisplayScreen(
                 barcodeList: barcodeList,

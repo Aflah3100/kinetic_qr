@@ -8,6 +8,7 @@ import 'package:kinetic_qr/screens/qr_code_display_screen/qr_code_display_screen
 import 'package:kinetic_qr/screens/qr_code_result_screen/qr_code_result_display_screen.dart';
 import 'package:kinetic_qr/screens/scan_qr_code_screen/scan_qr_code_screen.dart';
 import 'package:kinetic_qr/screens/settings_screen/settings_screen.dart';
+import 'package:kinetic_qr/utils/assets.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -17,7 +18,8 @@ class HomeScreen extends StatelessWidget {
   final screens = [
     CreateQrCodeScreen(),
     ScanQrCodeScreen(),
-     QrCodeResultDisplayScreen(barcodeList: [], barCodeType: 'hello',capturedTime: '2024-09-09 11:00',)
+    SettingsScreen()
+    //  const QrCodeResultDisplayScreen(barcodeList: [], barCodeType: BarCodeType.text,capturedTime: '2024-09-09 11:00',)
   ];
 
   @override

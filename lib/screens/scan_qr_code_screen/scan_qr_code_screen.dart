@@ -68,18 +68,16 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
 
           final List<Barcode> barcodeList = capturedBarcode.barcodes;
           final Barcode barcode = barcodeList.first;
-          String dataType = 'Unknown';
-
-          print("result ${isContactInfo(barcode.rawValue ?? '')}");
+          BarCodeType dataType = BarCodeType.unknown;
 
           if (barcode.type == BarcodeType.url) {
-            dataType = 'Website Url';
+            dataType = BarCodeType.website;
           } else if (isContactInfo(barcode.rawValue ?? '')) {
-            dataType = 'Contact Info';
+            dataType = BarCodeType.contact;
           } else if (barcode.type == BarcodeType.text) {
-            dataType = 'Text';
+            dataType = BarCodeType.text;
           } else if (barcode.type == BarcodeType.wifi) {
-            dataType = 'Wifi';
+            dataType = BarCodeType.wifi;
           }
 
           // Navigate to the result screen
