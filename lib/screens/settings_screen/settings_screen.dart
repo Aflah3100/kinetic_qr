@@ -133,69 +133,86 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: Container(
         padding: const EdgeInsets.all(10),
-        child: ListView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            //Top-Container
-            Container(
-              width: double.maxFinite,
-              height: 200,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(15)),
-              child: Stack(
+            Expanded(
+              child: ListView(
                 children: [
-                  //image-container
-                  SizedBox(
+                  //Top-Container
+                  Container(
                     width: double.maxFinite,
                     height: 200,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Image.asset(
-                        Assets.colorfulBgImage,
-                        fit: BoxFit.fitWidth,
+                    decoration: BoxDecoration(
+                        color: const Color(0xff94D5E9),
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Kinetic QR',
+                            style: TextStyle(
+                                fontFamily: 'Kanit',
+                                fontSize: 40.0,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xffEC4533),
+                                letterSpacing: 2),
+                          ),
+                          Expanded(child: Image.asset(Assets.qrCodeImage))
+                        ],
                       ),
                     ),
                   ),
-                  Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Kinetic QR',
-                          style: TextStyle(
-                              fontFamily: 'Kanit',
-                              fontSize: 40.0,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xffEC4533),
-                              letterSpacing: 2),
-                        ),
-                        Expanded(child: Image.asset(Assets.qrCodeImage))
-                      ],
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  // Feedback & Support
+                  ListTile(
+                    leading: const Icon(
+                      Icons.feedback,
+                      color: Assets.loadingScreenBlueColor,
                     ),
+                    title: const Text(
+                      'Feedback & Support',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    subtitle: const Text(
+                      'Send us your feedback or report an issue',
+                      style: TextStyle(fontWeight: FontWeight.w400),
+                    ),
+                    onTap: () {
+                      _showFeedbackDialog(context);
+                    },
                   ),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 50,
-            ),
-            // Feedback & Support
-            ListTile(
-              leading: const Icon(
-                Icons.feedback,
-                color: Assets.loadingScreenBlueColor,
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.qr_code_2,
+                    color: Colors.grey,
+                    size: 30.0,
+                  ),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child: Text(
+                      'Kinetic QR - Simplifying your QR code experience with fast and secure scanning.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              title: const Text(
-                'Feedback & Support',
-                style: TextStyle(fontWeight: FontWeight.w500),
-              ),
-              subtitle: const Text(
-                'Send us your feedback or report an issue',
-                style: TextStyle(fontWeight: FontWeight.w400),
-              ),
-              onTap: () {
-                _showFeedbackDialog(context);
-              },
             ),
           ],
         ),
