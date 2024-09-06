@@ -10,11 +10,7 @@ import 'package:kinetic_qr/utils/assets.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(DevicePreview(
-      enabled: true,
-      builder: (context) {
-        return const MyApp();
-      }));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -32,8 +28,6 @@ class MyApp extends StatelessWidget {
             create: (context) => CreateQrCodeScreenProvider())
       ],
       child: MaterialApp(
-        builder: DevicePreview.appBuilder,
-        locale: DevicePreview.locale(context),
         title: 'Kinetic QR',
         themeMode: ThemeMode.light,
         darkTheme: ThemeData(
