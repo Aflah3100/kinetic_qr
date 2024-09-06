@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kinetic_qr/screens/qr_code_result_screen/qr_code_result_display_screen.dart';
 import 'package:kinetic_qr/utils/assets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:torch_light/torch_light.dart';
 
 class ScanQrCodeScreen extends StatefulWidget {
@@ -18,6 +22,7 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
   final MobileScannerController scannerController = MobileScannerController();
   bool isProcessing = false;
   bool isTorchOn = false;
+  File? pickedImage;
 
   void _toggleTorch() async {
     try {
@@ -36,6 +41,45 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
           backgroundColor: Colors.red,
           textColor: Colors.white);
     }
+  }
+
+  Future<void> _requestStoragePermission() async {
+    if (Platform.isAndroid) {
+      await Permission.mediaLibrary.request();
+    } else if (Platform.isIOS) {
+      await Permission.photos.request();
+    } else {
+      await Permission.storage.request();
+    }
+  }
+
+  Future<File?> _pickImage() async {
+    await _requestStoragePermission();
+    PermissionStatus status;
+
+    if (Platform.isAndroid) {
+      status = await Permission.mediaLibrary.status;
+    } else if (Platform.isIOS) {
+      status = await Permission.photos.status;
+    } else {
+      status = await Permission.storage.status;
+    }
+
+    if (status.isGranted) {
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        return File(pickedFile.path);
+      }
+    }
+
+    Fluttertoast.showToast(
+      msg: 'Permission denied to access gallery',
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+    );
+    return null;
   }
 
   String captureTime() {
@@ -112,10 +156,19 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
                           padding: EdgeInsets.symmetric(vertical: 8.0),
                           child: VerticalDivider(),
                         ),
-                        const Icon(
-                          size: 23,
-                          Icons.photo,
-                          color: Colors.white,
+                        InkWell(
+                          onTap: () async {
+                            File? pickedImage = await _pickImage();
+                            print("Image: $pickedImage");
+                            if (pickedImage != null) {
+                              //scn-qr-code
+                            }
+                          },
+                          child: const Icon(
+                            size: 23,
+                            Icons.photo,
+                            color: Colors.white,
+                          ),
                         )
                       ],
                     ),
