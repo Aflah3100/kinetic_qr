@@ -22,7 +22,7 @@ class QrCodeResultDisplayScreen extends StatelessWidget {
   final BarCodeType barCodeType;
   final String capturedTime;
 
-  //Functions
+  //Utility-Functions
 
   String _formatWifiQrCode(String qrCode) {
     final components = qrCode.split(';');

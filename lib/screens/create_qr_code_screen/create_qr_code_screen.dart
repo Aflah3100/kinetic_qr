@@ -208,6 +208,7 @@ class CreateQrCodeScreen extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
+                //Bottom-option-buttons
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Selector<CreateQrCodeScreenProvider,int>(

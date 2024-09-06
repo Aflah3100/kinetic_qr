@@ -82,6 +82,7 @@ class _QrCodeDisplayScreenState extends State<QrCodeDisplayScreen> {
                 ),
               ),
             ),
+            //Option-buttons
             Expanded(
                 child: Container(
               decoration: const BoxDecoration(

@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kinetic_qr/utils/assets.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -99,6 +96,7 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
+              //Cancel-button
               SizedBox(
                 width: 100,
                 height: 40,

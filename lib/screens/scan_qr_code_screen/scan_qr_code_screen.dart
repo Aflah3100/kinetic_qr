@@ -26,6 +26,8 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
   bool isTorchOn = false;
   File? pickedImage;
 
+  //Functions
+
   void _toggleTorch() async {
     try {
       if (isTorchOn) {
@@ -86,7 +88,7 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
     }
   }
 
-  String captureTime() {
+  String _captureTime() {
     DateTime now = DateTime.now();
 
     String formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
@@ -151,7 +153,7 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
 
       final convertedBarCodeList = _convertToMobileScannerBarcodes(barcodes);
       Navigator.pushNamed(context, QrCodeResultDisplayScreen.routeName,
-          arguments: [convertedBarCodeList, barCodeType, captureTime()]);
+          arguments: [convertedBarCodeList, barCodeType, _captureTime()]);
     } catch (e) {
       Fluttertoast.showToast(
         msg: 'Failed to scan barcode: $e',
@@ -215,7 +217,6 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
                       children: [
                         InkWell(
                           onTap: () {
-                            //Toggle-torch
                             _toggleTorch();
                           },
                           child: Icon(
@@ -276,7 +277,7 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
           Navigator.pushNamed(
             context,
             QrCodeResultDisplayScreen.routeName,
-            arguments: [barcodeList, dataType, captureTime()],
+            arguments: [barcodeList, dataType, _captureTime()],
           ).then((_) {
             setState(() {
               isProcessing = false;
