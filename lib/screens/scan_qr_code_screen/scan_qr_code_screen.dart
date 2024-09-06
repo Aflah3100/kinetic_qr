@@ -153,7 +153,6 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
       Navigator.pushNamed(context, QrCodeResultDisplayScreen.routeName,
           arguments: [convertedBarCodeList, barCodeType, captureTime()]);
     } catch (e) {
-      // Handling-error
       Fluttertoast.showToast(
         msg: 'Failed to scan barcode: $e',
         backgroundColor: Colors.red,

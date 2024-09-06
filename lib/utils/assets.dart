@@ -8,6 +8,8 @@ class Assets {
   static const qrCodeScanningAnimation =
       'assets/animations/qr_code_scanning_animation.json';
   static const loadingScreenBlueColor = Color.fromARGB(255, 10, 156, 185);
+  static const shinyWhiteBgImage = 'assets/images/shiny_white_bg_image.jpg';
+  static const greyBgImage = 'assets/images/grey_bg_image.jpg';
 }
 
-enum BarCodeType { text, website, contact, wifi,unknown }
+enum BarCodeType { text, website, contact, wifi, unknown }

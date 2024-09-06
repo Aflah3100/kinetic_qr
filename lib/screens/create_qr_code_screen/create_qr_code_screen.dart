@@ -148,94 +148,107 @@ class CreateQrCodeScreen extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    // Text-QrCode-Container
-                    if (screenProvider.getScreenIndex() == 0)
-                      TextQrCodeContainer(
-                        height: height,
-                        textController: textQrCodeController,
-                      ),
+            //Bg-Image
+            SizedBox(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              child: Image.asset(
+                Assets.greyBgImage,
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+            Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        // Text-QrCode-Container
+                        if (screenProvider.getScreenIndex() == 0)
+                          TextQrCodeContainer(
+                            height: height,
+                            textController: textQrCodeController,
+                          ),
 
-                    // Website-Qrcode-Container
-                    if (screenProvider.getScreenIndex() == 1)
-                      WebisteQrCodeContainer(
-                        height: height,
-                        websiteTextController: webisteQrCodeController,
-                      ),
+                        // Website-Qrcode-Container
+                        if (screenProvider.getScreenIndex() == 1)
+                          WebisteQrCodeContainer(
+                            height: height,
+                            websiteTextController: webisteQrCodeController,
+                          ),
 
-                    // Contacts-qr-code-container
-                    if (screenProvider.getScreenIndex() == 2)
-                      ContactsQrCodeContainer(
-                          nameController: nameController,
-                          phoneNumbercontroller: phoneNumbercontroller,
-                          emailController: emailController,
-                          companyNameController: companyNamecontroller,
-                          jobTitleController: jobTitleController,
-                          addressController: addresController),
+                        // Contacts-qr-code-container
+                        if (screenProvider.getScreenIndex() == 2)
+                          ContactsQrCodeContainer(
+                              nameController: nameController,
+                              phoneNumbercontroller: phoneNumbercontroller,
+                              emailController: emailController,
+                              companyNameController: companyNamecontroller,
+                              jobTitleController: jobTitleController,
+                              addressController: addresController),
 
-                    // wifi-QrCode-container
-                    if (screenProvider.getScreenIndex() == 3)
-                      WifiQrCodeContainer(
-                          networkNameController: wifiNetworkNameController,
-                          networkPasswordController:
-                              wifiNetworkPasswordController),
-                  ],
+                        // Wifi-QrCode-container
+                        if (screenProvider.getScreenIndex() == 3)
+                          WifiQrCodeContainer(
+                              networkNameController: wifiNetworkNameController,
+                              networkPasswordController:
+                                  wifiNetworkPasswordController),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Wrap(
-                spacing: 20,
-                runSpacing: 10,
-                children: [
-                  QrCodeOptionButton(
-                    icon: FontAwesomeIcons.t,
-                    label: 'Text',
-                    isClicked: screenProvider.getScreenIndex() == 0,
-                    onTap: () {
-                      screenProvider.setScreenIndex(0);
-                    },
+                const SizedBox(
+                  height: 10,
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Wrap(
+                    spacing: 20,
+                    runSpacing: 10,
+                    children: [
+                      QrCodeOptionButton(
+                        icon: FontAwesomeIcons.t,
+                        label: 'Text',
+                        isClicked: screenProvider.getScreenIndex() == 0,
+                        onTap: () {
+                          screenProvider.setScreenIndex(0);
+                        },
+                      ),
+                      QrCodeOptionButton(
+                        icon: FontAwesomeIcons.link,
+                        label: 'Website',
+                        isClicked: screenProvider.getScreenIndex() == 1,
+                        onTap: () {
+                          screenProvider.setScreenIndex(1);
+                        },
+                      ),
+                      QrCodeOptionButton(
+                        icon: FontAwesomeIcons.addressCard,
+                        label: 'Contacts',
+                        isClicked: screenProvider.getScreenIndex() == 2,
+                        onTap: () {
+                          screenProvider.setScreenIndex(2);
+                        },
+                      ),
+                      QrCodeOptionButton(
+                        icon: FontAwesomeIcons.wifi,
+                        label: 'Wifi',
+                        isClicked: screenProvider.getScreenIndex() == 3,
+                        onTap: () {
+                          screenProvider.setScreenIndex(3);
+                        },
+                      )
+                    ],
                   ),
-                  QrCodeOptionButton(
-                    icon: FontAwesomeIcons.link,
-                    label: 'Website',
-                    isClicked: screenProvider.getScreenIndex() == 1,
-                    onTap: () {
-                      screenProvider.setScreenIndex(1);
-                    },
-                  ),
-                  QrCodeOptionButton(
-                    icon: FontAwesomeIcons.addressCard,
-                    label: 'Contacts',
-                    isClicked: screenProvider.getScreenIndex() == 2,
-                    onTap: () {
-                      screenProvider.setScreenIndex(2);
-                    },
-                  ),
-                  QrCodeOptionButton(
-                    icon: FontAwesomeIcons.wifi,
-                    label: 'Wifi',
-                    isClicked: screenProvider.getScreenIndex() == 3,
-                    onTap: () {
-                      screenProvider.setScreenIndex(3);
-                    },
-                  )
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 10,
+                )
+              ],
             ),
-            const SizedBox(
-              height: 10,
-            )
           ],
         ),
       ),
