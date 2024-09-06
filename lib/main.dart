@@ -35,7 +35,12 @@ class MyApp extends StatelessWidget {
         builder: DevicePreview.appBuilder,
         locale: DevicePreview.locale(context),
         title: 'Kinetic QR',
+        themeMode: ThemeMode.light,
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+        ),
         theme: ThemeData(
+            brightness: Brightness.light,
             colorScheme:
                 ColorScheme.fromSeed(seedColor: Assets.loadingScreenBlueColor),
             useMaterial3: true,

@@ -13,10 +13,11 @@ class QrCodeOptionButton extends StatelessWidget {
   final String label;
   final bool isClicked;
   final void Function() onTap;
+  
 
   @override
   Widget build(BuildContext context) {
-    final height =MediaQuery.sizeOf(context).height;
+    print("qrcode button build invoked");
     final width=MediaQuery.sizeOf(context).width;
     return GestureDetector(
       onTap: onTap,

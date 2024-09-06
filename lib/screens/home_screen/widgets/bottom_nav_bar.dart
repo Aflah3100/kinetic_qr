@@ -10,7 +10,8 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screensProvider = Provider.of<HomeScreenProvider>(context, listen: true);
+    final screensProvider =
+        Provider.of<HomeScreenProvider>(context, listen: true);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       height: 70,

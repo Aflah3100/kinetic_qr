@@ -10,16 +10,7 @@ class SettingsScreen extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            'Scan QR code/Barcode',
-            style: TextStyle(fontSize: 15.0, color: Colors.white),
-          ),
-          Lottie.asset(
-            Assets.qrCodeScanningAnimation,
-            width: 300,
-          )
-        ],
+        children: [],
       ),
     );
   }

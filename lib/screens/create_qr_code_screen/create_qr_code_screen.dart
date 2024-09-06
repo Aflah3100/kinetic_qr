@@ -35,8 +35,7 @@ class CreateQrCodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
-    final screenProvider =
-        Provider.of<CreateQrCodeScreenProvider>(context, listen: true);
+    final screenProvider = context.read<CreateQrCodeScreenProvider>();
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -164,39 +163,45 @@ class CreateQrCodeScreen extends StatelessWidget {
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        // Text-QrCode-Container
-                        if (screenProvider.getScreenIndex() == 0)
-                          TextQrCodeContainer(
-                            height: height,
-                            textController: textQrCodeController,
-                          ),
-
-                        // Website-Qrcode-Container
-                        if (screenProvider.getScreenIndex() == 1)
-                          WebisteQrCodeContainer(
-                            height: height,
-                            websiteTextController: webisteQrCodeController,
-                          ),
-
-                        // Contacts-qr-code-container
-                        if (screenProvider.getScreenIndex() == 2)
-                          ContactsQrCodeContainer(
-                              nameController: nameController,
-                              phoneNumbercontroller: phoneNumbercontroller,
-                              emailController: emailController,
-                              companyNameController: companyNamecontroller,
-                              jobTitleController: jobTitleController,
-                              addressController: addresController),
-
-                        // Wifi-QrCode-container
-                        if (screenProvider.getScreenIndex() == 3)
-                          WifiQrCodeContainer(
-                              networkNameController: wifiNetworkNameController,
-                              networkPasswordController:
-                                  wifiNetworkPasswordController),
-                      ],
+                    //Display-container
+                    child: Selector<CreateQrCodeScreenProvider,int>(
+                      selector: (context,provider)=> provider.getScreenIndex(),
+                      builder: (context,index,_) {
+                        return Column(
+                          children: [
+                            // Text-QrCode-Container
+                            if (screenProvider.getScreenIndex() == 0)
+                              TextQrCodeContainer(
+                                height: height,
+                                textController: textQrCodeController,
+                              ),
+                        
+                            // Website-Qrcode-Container
+                            if (screenProvider.getScreenIndex() == 1)
+                              WebisteQrCodeContainer(
+                                height: height,
+                                websiteTextController: webisteQrCodeController,
+                              ),
+                        
+                            // Contacts-qr-code-container
+                            if (screenProvider.getScreenIndex() == 2)
+                              ContactsQrCodeContainer(
+                                  nameController: nameController,
+                                  phoneNumbercontroller: phoneNumbercontroller,
+                                  emailController: emailController,
+                                  companyNameController: companyNamecontroller,
+                                  jobTitleController: jobTitleController,
+                                  addressController: addresController),
+                        
+                            // Wifi-QrCode-container
+                            if (screenProvider.getScreenIndex() == 3)
+                              WifiQrCodeContainer(
+                                  networkNameController: wifiNetworkNameController,
+                                  networkPasswordController:
+                                      wifiNetworkPasswordController),
+                          ],
+                        );
+                      }
                     ),
                   ),
                 ),
@@ -205,43 +210,48 @@ class CreateQrCodeScreen extends StatelessWidget {
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: Wrap(
-                    spacing: 20,
-                    runSpacing: 10,
-                    children: [
-                      QrCodeOptionButton(
-                        icon: FontAwesomeIcons.t,
-                        label: 'Text',
-                        isClicked: screenProvider.getScreenIndex() == 0,
-                        onTap: () {
-                          screenProvider.setScreenIndex(0);
-                        },
-                      ),
-                      QrCodeOptionButton(
-                        icon: FontAwesomeIcons.link,
-                        label: 'Website',
-                        isClicked: screenProvider.getScreenIndex() == 1,
-                        onTap: () {
-                          screenProvider.setScreenIndex(1);
-                        },
-                      ),
-                      QrCodeOptionButton(
-                        icon: FontAwesomeIcons.addressCard,
-                        label: 'Contacts',
-                        isClicked: screenProvider.getScreenIndex() == 2,
-                        onTap: () {
-                          screenProvider.setScreenIndex(2);
-                        },
-                      ),
-                      QrCodeOptionButton(
-                        icon: FontAwesomeIcons.wifi,
-                        label: 'Wifi',
-                        isClicked: screenProvider.getScreenIndex() == 3,
-                        onTap: () {
-                          screenProvider.setScreenIndex(3);
-                        },
-                      )
-                    ],
+                  child: Selector<CreateQrCodeScreenProvider,int>(
+                    selector: (ctx,provider)=> provider.getScreenIndex(),
+                    builder: (context,index,_) {
+                      return Wrap(
+                        spacing: 20,
+                        runSpacing: 10,
+                        children: [
+                          QrCodeOptionButton(
+                            icon: FontAwesomeIcons.t,
+                            label: 'Text',
+                            isClicked: screenProvider.getScreenIndex() == 0,
+                            onTap: () {
+                              screenProvider.setScreenIndex(0);
+                            },
+                          ),
+                          QrCodeOptionButton(
+                            icon: FontAwesomeIcons.link,
+                            label: 'Website',
+                            isClicked: screenProvider.getScreenIndex() == 1,
+                            onTap: () {
+                              screenProvider.setScreenIndex(1);
+                            },
+                          ),
+                          QrCodeOptionButton(
+                            icon: FontAwesomeIcons.addressCard,
+                            label: 'Contacts',
+                            isClicked: screenProvider.getScreenIndex() == 2,
+                            onTap: () {
+                              screenProvider.setScreenIndex(2);
+                            },
+                          ),
+                          QrCodeOptionButton(
+                            icon: FontAwesomeIcons.wifi,
+                            label: 'Wifi',
+                            isClicked: screenProvider.getScreenIndex() == 3,
+                            onTap: () {
+                              screenProvider.setScreenIndex(3);
+                            },
+                          )
+                        ],
+                      );
+                    }
                   ),
                 ),
                 const SizedBox(
