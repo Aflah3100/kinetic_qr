@@ -105,40 +105,61 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
   }
 
   Future<void> _scanQrCodeFromImage(File image) async {
-    final InputImage inputImage = InputImage.fromFile(image);
-    final List<BarcodeFormat> formats = [BarcodeFormat.all];
-    final barcodeScanner = BarcodeScanner(formats: formats);
-    var barCodeType = BarCodeType.unknown;
+    try {
+      final InputImage inputImage = InputImage.fromFile(image);
+      final List<BarcodeFormat> formats = [BarcodeFormat.all];
+      final barcodeScanner = BarcodeScanner(formats: formats);
 
-    final List<Barcode> barcodes =
-        await barcodeScanner.processImage(inputImage);
+      final List<Barcode> barcodes =
+          await barcodeScanner.processImage(inputImage);
 
-    for (Barcode barcode in barcodes) {
-      final BarcodeType type = barcode.type;
+      if (barcodes.isEmpty) {
+        Fluttertoast.showToast(
+          msg: 'No QR codes detected in the image',
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+        );
+        return;
+      }
 
-      if (_isContactInfo(barcode.rawValue ?? '')) {
-        barCodeType = BarCodeType.contact;
-      } else {
-        switch (type) {
-          case BarcodeType.wifi:
-            barCodeType = BarCodeType.wifi;
-            break;
-          case BarcodeType.url:
-            barCodeType = BarCodeType.website;
-            break;
-          case BarcodeType.text:
-            barCodeType = BarCodeType.text;
-          case BarcodeType.contactInfo:
-            barCodeType = BarCodeType.contact;
-          default:
-            break;
+      var barCodeType = BarCodeType.unknown;
+
+      for (Barcode barcode in barcodes) {
+        final BarcodeType type = barcode.type;
+
+        if (_isContactInfo(barcode.rawValue ?? '')) {
+          barCodeType = BarCodeType.contact;
+        } else {
+          switch (type) {
+            case BarcodeType.wifi:
+              barCodeType = BarCodeType.wifi;
+              break;
+            case BarcodeType.url:
+              barCodeType = BarCodeType.website;
+              break;
+            case BarcodeType.text:
+              barCodeType = BarCodeType.text;
+              break;
+            case BarcodeType.contactInfo:
+              barCodeType = BarCodeType.contact;
+              break;
+            default:
+              break;
+          }
         }
       }
-    }
 
-    final convertedBarCodeList = _convertToMobileScannerBarcodes(barcodes);
-    Navigator.pushNamed(context, QrCodeResultDisplayScreen.routeName,
-        arguments: [convertedBarCodeList, barCodeType, captureTime()]);
+      final convertedBarCodeList = _convertToMobileScannerBarcodes(barcodes);
+      Navigator.pushNamed(context, QrCodeResultDisplayScreen.routeName,
+          arguments: [convertedBarCodeList, barCodeType, captureTime()]);
+    } catch (e) {
+      // Handling-error
+      Fluttertoast.showToast(
+        msg: 'Failed to scan barcode: $e',
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
   }
 
   bool _isContactInfo(String data) {
