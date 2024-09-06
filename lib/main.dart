@@ -29,10 +29,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Kinetic QR',
-        themeMode: ThemeMode.light,
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-        ),
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
             brightness: Brightness.light,
             colorScheme:
