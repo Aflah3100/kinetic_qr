@@ -10,6 +10,8 @@ class Assets {
   static const loadingScreenBlueColor = Color.fromARGB(255, 10, 156, 185);
   static const shinyWhiteBgImage = 'assets/images/shiny_white_bg_image.jpg';
   static const greyBgImage = 'assets/images/grey_bg_image.jpg';
+  static const colorfulBgImage = 'assets/images/colorful_bg_image.jpg';
+  static const qrCodeImage = 'assets/images/qr_code_image.png';
 }
 
 enum BarCodeType { text, website, contact, wifi, unknown }

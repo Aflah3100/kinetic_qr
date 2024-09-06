@@ -74,6 +74,8 @@ flutter:
     - assets/animations/qr_code_scanning_animation.json
     - assets/images/shiny_white_bg_image.jpg
     - assets/images/grey_bg_image.jpg
+    - assets/images/colorful_bg_image.jpg
+    - assets/images/qr_code_image.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see
