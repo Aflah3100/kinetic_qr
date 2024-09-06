@@ -1,15 +1,16 @@
-import 'dart:io';
+// ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:kinetic_qr/screens/qr_code_result_screen/qr_code_result_display_screen.dart';
 import 'package:kinetic_qr/utils/assets.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart' as mobile_scanner;
 import 'package:permission_handler/permission_handler.dart';
-import 'package:torch_light/torch_light.dart';
 
 class ScanQrCodeScreen extends StatefulWidget {
   const ScanQrCodeScreen({super.key});
@@ -19,7 +20,8 @@ class ScanQrCodeScreen extends StatefulWidget {
 }
 
 class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
-  final MobileScannerController scannerController = MobileScannerController();
+  final mobile_scanner.MobileScannerController scannerController =
+      mobile_scanner.MobileScannerController();
   bool isProcessing = false;
   bool isTorchOn = false;
   File? pickedImage;
@@ -71,15 +73,17 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
 
       if (pickedFile != null) {
         return File(pickedFile.path);
+      } else {
+        return null;
       }
+    } else {
+      Fluttertoast.showToast(
+        msg: 'Permission denied to access gallery',
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+      return null;
     }
-
-    Fluttertoast.showToast(
-      msg: 'Permission denied to access gallery',
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-    );
-    return null;
   }
 
   String captureTime() {
@@ -90,7 +94,54 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
     return formattedTime;
   }
 
-  bool isContactInfo(String data) {
+  List<mobile_scanner.Barcode> _convertToMobileScannerBarcodes(
+      List<Barcode> mlKitBarcodes) {
+    return mlKitBarcodes.map((mlKitBarcode) {
+      return mobile_scanner.Barcode(
+        rawValue: mlKitBarcode.rawValue,
+        format: mobile_scanner.BarcodeFormat.values[mlKitBarcode.format.index],
+      );
+    }).toList();
+  }
+
+  Future<void> _scanQrCodeFromImage(File image) async {
+    final InputImage inputImage = InputImage.fromFile(image);
+    final List<BarcodeFormat> formats = [BarcodeFormat.all];
+    final barcodeScanner = BarcodeScanner(formats: formats);
+    var barCodeType = BarCodeType.unknown;
+
+    final List<Barcode> barcodes =
+        await barcodeScanner.processImage(inputImage);
+
+    for (Barcode barcode in barcodes) {
+      final BarcodeType type = barcode.type;
+
+      if (_isContactInfo(barcode.rawValue ?? '')) {
+        barCodeType = BarCodeType.contact;
+      } else {
+        switch (type) {
+          case BarcodeType.wifi:
+            barCodeType = BarCodeType.wifi;
+            break;
+          case BarcodeType.url:
+            barCodeType = BarCodeType.website;
+            break;
+          case BarcodeType.text:
+            barCodeType = BarCodeType.text;
+          case BarcodeType.contactInfo:
+            barCodeType = BarCodeType.contact;
+          default:
+            break;
+        }
+      }
+    }
+
+    final convertedBarCodeList = _convertToMobileScannerBarcodes(barcodes);
+    Navigator.pushNamed(context, QrCodeResultDisplayScreen.routeName,
+        arguments: [convertedBarCodeList, barCodeType, captureTime()]);
+  }
+
+  bool _isContactInfo(String data) {
     return data.contains('Name:') &&
         data.contains('Phone:') &&
         data.contains('Email:') &&
@@ -107,7 +158,7 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MobileScanner(
+    return mobile_scanner.MobileScanner(
       controller: scannerController,
       overlayBuilder: (context, constraints) {
         return Center(
@@ -136,7 +187,7 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
                     height: 45,
                     padding: const EdgeInsets.symmetric(horizontal: 5),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3),
+                      borderRadius: BorderRadius.circular(7),
                       color: const Color.fromARGB(128, 57, 56, 56),
                     ),
                     child: Row(
@@ -144,6 +195,7 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
                       children: [
                         InkWell(
                           onTap: () {
+                            //Toggle-torch
                             _toggleTorch();
                           },
                           child: Icon(
@@ -159,9 +211,9 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
                         InkWell(
                           onTap: () async {
                             File? pickedImage = await _pickImage();
-                            print("Image: $pickedImage");
                             if (pickedImage != null) {
-                              //scn-qr-code
+                              //Scan-QR-Code
+                              _scanQrCodeFromImage(pickedImage);
                             }
                           },
                           child: const Icon(
@@ -185,17 +237,18 @@ class _ScanQrCodeScreenState extends State<ScanQrCodeScreen> {
             isProcessing = true;
           });
 
-          final List<Barcode> barcodeList = capturedBarcode.barcodes;
-          final Barcode barcode = barcodeList.first;
+          final List<mobile_scanner.Barcode> barcodeList =
+              capturedBarcode.barcodes;
+          final mobile_scanner.Barcode barcode = barcodeList.first;
           BarCodeType dataType = BarCodeType.unknown;
 
-          if (barcode.type == BarcodeType.url) {
+          if (barcode.type == mobile_scanner.BarcodeType.url) {
             dataType = BarCodeType.website;
-          } else if (isContactInfo(barcode.rawValue ?? '')) {
+          } else if (_isContactInfo(barcode.rawValue ?? '')) {
             dataType = BarCodeType.contact;
-          } else if (barcode.type == BarcodeType.text) {
+          } else if (barcode.type == mobile_scanner.BarcodeType.text) {
             dataType = BarCodeType.text;
-          } else if (barcode.type == BarcodeType.wifi) {
+          } else if (barcode.type == mobile_scanner.BarcodeType.wifi) {
             dataType = BarCodeType.wifi;
           }
 
