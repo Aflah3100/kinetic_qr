@@ -110,3 +110,12 @@ To run this project locally:
   </tr>
 </table>
 
+## Demo
+
+<p align="center">
+  <a href="[demo_video/demo_video.mp4](https://drive.google.com/file/d/1W9AGtDviCWOjY-FSvaV0itSBGZTO5bG9/view?usp=sharing)">
+    <img src="demo_video/demo_gif.gif" alt="App Demo" width="400"/>
+  </a>
+</p>
+
+Click the image above to watch the demo video.
