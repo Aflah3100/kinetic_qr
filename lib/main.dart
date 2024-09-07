@@ -1,4 +1,3 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:kinetic_qr/providers/create_qr_code_screen_provider.dart';
 import 'package:kinetic_qr/providers/home_screen_provider.dart';
