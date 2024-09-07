@@ -34,14 +34,17 @@ The `lib` folder is organized into the following subfolders:
   
 2. **router**
    - Contains routing logic, including route constants (names for each screen) and the `generateRoute` function to navigate between screens.
+  
+3. **models**
+   - Contains data models, such as contact information models and other structured data used throughout the app. 
 
-3. **screens**
+4. **screens**
    - Contains a folder for each screen of the app, and within each screen folder, a `widget` subfolder holds the widgets associated with that screen.
 
-4. **services**
+5. **services**
    - Contains service files, such as those for managing shared preferences, handling data storage etc. 
 
-5. **utils**
+6. **utils**
    - Contains utility files, such as assets and other helper functions used throughout the app.
 
 ## Installation
