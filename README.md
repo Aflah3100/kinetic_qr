@@ -116,10 +116,10 @@ To run this project locally:
 ## Demo
 
 <p align="center">
-  <a href="https://drive.google.com/file/d/1W9AGtDviCWOjY-FSvaV0itSBGZTO5bG9/view?usp=sharing" target="_blank">
+  <a target="_blank">
     <img src="demo_video/demo_gif.gif" alt="App Demo" width="250"/>
   </a>
 </p>
 
-<p align="center"> Click the image above to watch the demo video.</p>
+
 
