@@ -4,6 +4,7 @@ class CreateQrCodeScreenProvider with ChangeNotifier {
   int _screenIndex = 0;
   int _wifisecurityType = 0;
   bool _enableCreateButton = false;
+  
 
   int getScreenIndex() => _screenIndex;
 

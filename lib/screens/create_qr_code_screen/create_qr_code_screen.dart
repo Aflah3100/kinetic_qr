@@ -249,7 +249,8 @@ class CreateQrCodeScreen extends StatelessWidget {
                             onTap: () {
                               screenProvider.setScreenIndex(3);
                             },
-                          )
+                          ),
+                          QrCodeOptionButton(icon: Icons.abc_sharp, label: 'Sample', isClicked: false, onTap: (){})
                         ],
                       );
                     }
